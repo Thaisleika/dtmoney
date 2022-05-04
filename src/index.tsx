@@ -6,7 +6,7 @@ import { TransactionsTable } from "./components/TransactionsTable";
 
 createServer({
   models: {
-    transation: Model,
+    transaction: Model,
   },
 
   seeds(server) {
