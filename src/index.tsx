@@ -2,10 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createServer, Model } from "miragejs";
 import { App } from "./App";
+import { TransactionsTable } from "./components/TransactionsTable";
 
 createServer({
   models: {
-    transations: Model,
+    transation: Model,
   },
 
   seeds(server) {
@@ -19,7 +20,6 @@ createServer({
           amount: 6000,
           createdAt: new Date("2021-02-12 09:00:00"),
         },
-
         {
           id: 2,
           title: "Aluguel",
@@ -30,6 +30,7 @@ createServer({
         },
       ],
     });
+    console.log(TransactionsTable);
   },
 
   routes() {
