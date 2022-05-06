@@ -1,3 +1,4 @@
+import { type } from "os";
 import { createContext } from "react";
 import { useState, useEffect, ReactNode } from "react";
 import { api } from "./services/api";
@@ -11,11 +12,24 @@ interface Transaction {
   createdAt: string;
 }
 
+type TransactionInput = Omit<Transaction, "id" | "createdAt">;
+
+// usa-se em vez de omitir elementos (Omit) adicionar (Pick) pegar...:
+
+//tupe TransactionInput = Pick<Transaction, 'title' | 'amount' | 'type' | 'category'>;
+
+interface TransactionsContextData {
+  transactions: Transaction[];
+  createTransaction: (transaction: TransactionInput) => Promise<void>;
+}
+
 interface TransationsProviderProps {
   children: ReactNode;
 }
 
-export const TransactionsContext = createContext<Transaction[]>([]);
+export const TransactionsContext = createContext<TransactionsContextData>(
+  {} as TransactionsContextData
+);
 
 export function TransactionProvider({ children }: TransationsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -26,8 +40,18 @@ export function TransactionProvider({ children }: TransationsProviderProps) {
     });
   }, []);
 
+  async function createTransaction(TransactionInput: TransactionInput) {
+    const response = await api.post("/transactions", {
+      ...TransactionInput,
+      createdAt: new Date(), //qdo temos o miraje como input de dados
+    });
+    const { transaction } = response.data;
+
+    setTransactions([...transactions, transaction]);
+  }
+
   return (
-    <TransactionsContext.Provider value={transactions}>
+    <TransactionsContext.Provider value={{ transactions, createTransaction }}>
       {children}
     </TransactionsContext.Provider>
   );
