@@ -1,11 +1,11 @@
-import Modal from "react-modal";
-import { Container, TransactionTypeContainer, RadioBox } from "./styles";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
+
+import { Container, TransactionTypeContainer, RadioBox } from "./styles";
 import { FormEvent, useState, useContext } from "react";
-import { api } from "../../services/api";
-import { TransactionsContext } from "../../TransactionsContext";
+import { useTransactions } from "../../hooks/useTransactions";
+import Modal from "react-modal";
 
 interface NewTransationModalProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ export function NewTransactionModal({
   isOpen,
   onRequestClose,
 }: NewTransationModalProps) {
-  const { createTransaction } = useContext(TransactionsContext);
+  const { createTransaction } = useTransactions();
 
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState(0); //trocamos o value peloa amount para poder substituir no objeto abaixo.
